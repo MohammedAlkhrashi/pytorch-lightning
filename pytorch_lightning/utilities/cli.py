@@ -113,7 +113,7 @@ MODEL_REGISTRY = _Registry()
 DATAMODULE_REGISTRY = _Registry()
 
 LOGGER_REGISTRY = _Registry()
-LOGGER_REGISTRY.register_classes(pl.loggers, pl.loggers.LightningLoggerBase)
+LOGGER_REGISTRY.register_classes(pl.loggers, pl.loggers.Logger)
 
 
 class LightningArgumentParser(ArgumentParser):

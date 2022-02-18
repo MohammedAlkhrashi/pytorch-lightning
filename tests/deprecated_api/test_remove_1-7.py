@@ -262,9 +262,7 @@ def test_v1_7_0_progress_bar_refresh_rate_trainer_constructor(tmpdir):
 
 def test_v1_7_0_lightning_logger_base_close(tmpdir):
     logger = CustomLogger()
-    with pytest.deprecated_call(
-        match="`LightningLoggerBase.close` method is deprecated in v1.5 and will be removed in v1.7."
-    ):
+    with pytest.deprecated_call(match="`Logger.close` method is deprecated in v1.5 and will be removed in v1.7."):
         logger.close()
     with pytest.deprecated_call(
         match="`LoggerCollection.close` method is deprecated in v1.5 and will be removed in v1.7."

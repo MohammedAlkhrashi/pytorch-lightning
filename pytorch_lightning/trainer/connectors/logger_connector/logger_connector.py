@@ -16,7 +16,7 @@ from typing import Any, Dict, Iterable, Optional, Union
 import torch
 
 import pytorch_lightning as pl
-from pytorch_lightning.loggers import LightningLoggerBase, LoggerCollection, TensorBoardLogger
+from pytorch_lightning.loggers import Logger, LoggerCollection, TensorBoardLogger
 from pytorch_lightning.plugins.environments.slurm_environment import SLURMEnvironment
 from pytorch_lightning.trainer.connectors.logger_connector.result import _METRICS, _OUT_DICT, _PBAR_DICT
 from pytorch_lightning.trainer.states import RunningStage
@@ -50,7 +50,7 @@ class LoggerConnector:
 
     def on_trainer_init(
         self,
-        logger: Union[bool, LightningLoggerBase, Iterable[LightningLoggerBase]],
+        logger: Union[bool, Logger, Iterable[Logger]],
         flush_logs_every_n_steps: Optional[int],
         log_every_n_steps: int,
         move_metrics_to_cpu: bool,
@@ -67,12 +67,12 @@ class LoggerConnector:
         self.trainer.log_every_n_steps = log_every_n_steps
         self.trainer.move_metrics_to_cpu = move_metrics_to_cpu
         for logger in self.trainer.loggers:
-            if is_overridden("agg_and_log_metrics", logger, LightningLoggerBase):
+            if is_overridden("agg_and_log_metrics", logger, Logger):
                 self._override_agg_and_log_metrics = True
                 rank_zero_deprecation(
-                    "`LightningLoggerBase.agg_and_log_metrics` is deprecated in v1.6 and will be removed"
-                    " in v1.8. `Trainer` will directly call `LightningLoggerBase.log_metrics` so custom"
-                    " loggers should not implement `LightningLoggerBase.agg_and_log_metrics`."
+                    "`Logger.agg_and_log_metrics` is deprecated in v1.6 and will be removed"
+                    " in v1.8. `Trainer` will directly call `Logger.log_metrics` so custom"
+                    " loggers should not implement `Logger.agg_and_log_metrics`."
                 )
                 break
 
@@ -86,7 +86,7 @@ class LoggerConnector:
         should_log_every_n_steps = (self.trainer.global_step + 1) % self.trainer.log_every_n_steps == 0
         return should_log_every_n_steps or self.trainer.should_stop
 
-    def configure_logger(self, logger: Union[bool, LightningLoggerBase, Iterable[LightningLoggerBase]]) -> None:
+    def configure_logger(self, logger: Union[bool, Logger, Iterable[Logger]]) -> None:
         if isinstance(logger, bool):
             # default logger
             self.trainer.logger = (

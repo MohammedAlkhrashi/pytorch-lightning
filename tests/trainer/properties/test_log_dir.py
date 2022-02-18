@@ -16,7 +16,7 @@ import os
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import LoggerCollection, TensorBoardLogger
-from pytorch_lightning.loggers.base import DummyLogger
+from pytorch_lightning.loggers.logger import DummyLogger
 from tests.helpers.boring_model import BoringModel
 
 
